@@ -1,0 +1,7 @@
+[package]
+name = "guessing"
+version = "0.1.0"
+authors = ["Yaroslav <jaroslav.dashkevich@gmail.com>"]
+
+[dependencies]
+rand="0.3.8"
