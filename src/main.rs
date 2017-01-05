@@ -1,102 +1,104 @@
+use std::cell::RefCell;
+
+struct Point
+{
+  x: i32,
+  y: i32
+}
+
+struct Point3d
+{
+  x: i32,
+  y: i32,
+  z: i32
+}
+
+struct PointRef<'a>
+{
+  x: &'a mut i32,
+  y: &'a mut i32
+}
+
+enum Message
+{
+  Quit,
+  ChangeColor(u32, u32, u32),
+  Write(String),
+  Move { x: i32, y: i32 },
+}
+
 fn main()
 {
-  let mut x: i32 = 10;
-  let y;
+  let mut x = 5;
+  println!("{}", x);
 
-  x = 5;
-  y = "sdff";
-  // (x, y) = (5, 6);
-  println!("{}, {:p}", x, y);
-  print_num(x);
+  x = 6;
+  println!("{}", x);
 
-  print_sum(x, add_one(10));
-  // diverges();
-
-  let f: fn(i32) -> i32 = add_one;
-
-  println!("{}", f(3));
-
-  let a = [1,2,3,4,5];
-  let ct = &a[..];
-  let md = &a[1..3];
-
-  println!("{}, {}", a[1], md[1]);
-
-
-  let x: (i32, &str) = (1, "hello");
-
-  println!("{}", x.1);
-
-  assert_eq!(6, add_one(5));
-
-  let y =
-    if true
-    {
-      12
-    }
-    else
-    {
-      1
-    };
-
+  let y = &mut x;
+  // let k = 10;
+  // y = &k;
+  *y += 1;
   println!("{}", y);
 
-  for (i, val) in (1..4).enumerate()
+
+  let x = RefCell::new(42);
+
+  let y = x.borrow_mut();
+  // let z = x.borrow_mut();
+
+  let mut origin = Point { x:0, y: 0 };
+  origin.x = 5;
+  println!("{}, {}", origin.x, origin.y);
+
+  let base_point = Point3d { x: 3, y: 8, z: 0 };
+  let point = Point3d { z: 10, .. base_point };
+  println!("{}, {}, {}", point.x, point.y, point.z);
+
   {
-    println!("{}, {}", i, val);
+    let r = PointRef { x: &mut 10, y: &mut 10 };
+
+    *r.x = 1;
+    *r.y = 11;
+
+    println!("{}, {}", r.x, r.y);
   }
 
-  'outer: for x in 0..4 {
-    'inner: for y in 0..4 {
-        if x % 2 == 0 { continue 'outer; } // continues the loop over x
-        if y % 2 == 0 { continue 'inner; } // continues the loop over y
-        println!("x: {}, y: {}", x, y);
-    }
+
+  let x: Message = Message::ChangeColor(3, 5, 6);
+
+
+  let x = 5;
+
+  match x {
+    1 => println!("one"),
+    2 => println!("two"),
+    3 => println!("three"),
+    4 => println!("four"),
+    5 => println!("five"),
+    _ => println!("something else"),
   }
 
-  let mut v = vec![1,2,3,4,5];
+  process_message(Message::ChangeColor(10, 145, 200));
+}
 
-  // let j: u32 = 2;
-  let j: usize = 2;
-  println!("{}", v[j]);
-
-
-  let mut k: i32 = 1;
-
-  match v.get(10)
+fn process_message(msg: Message)
+{
+  match msg
   {
-    Some(x) => println!("{}", x),
-    None    => println!("out of bound")
+    Message::Quit => quit(),
+    Message::ChangeColor(r, g, b) => change_color(r, g, b),
+    Message::Write(s) => println!("{}", s),
+    _ => println!("messed up"),
   };
-
-  for mut i in &v
-  { // wtf?
-    i = &k;
-    println!("{}: {}", i, k);
-  }
-
-  for i in &v
-  {
-    println!("{}", i);
-  }
 }
 
-fn print_num(x: i32)
+fn quit()
 {
-  println!("{}", x);
+  println!("quit");
 }
 
-fn print_sum(x: i32, y: i32)
+fn change_color(r: u32, g: u32, b: u32)
 {
-  println!("sum: {}", x + y);
-}
-
-fn add_one(x: i32) -> i32
-{
-  x + 1
-}
-
-fn diverges() -> !
-{
-  panic!("never returns");
+  println!("{}, {}, {}", r, g, b);
 }
