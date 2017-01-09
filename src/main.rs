@@ -1,104 +1,83 @@
-use std::cell::RefCell;
-
-struct Point
-{
-  x: i32,
-  y: i32
+#[derive(Debug)]
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64
 }
 
-struct Point3d
-{
-  x: i32,
-  y: i32,
-  z: i32
+#[derive(Debug)]
+struct Square {
+    x: f64,
+    y: f64,
+    side: f64
 }
 
-struct PointRef<'a>
-{
-  x: &'a mut i32,
-  y: &'a mut i32
+trait HasArea {
+  fn area(&self) -> f64;
+
+  fn is_larger(&self, &Self) -> bool;
 }
 
-enum Message
-{
-  Quit,
-  ChangeColor(u32, u32, u32),
-  Write(String),
-  Move { x: i32, y: i32 },
+impl HasArea for Circle {
+    fn area(&self) -> f64 {
+      std::f64::consts::PI * (self.radius * self.radius)
+    }
+
+    fn is_larger(&self, other: &Self) -> bool {
+      self.area() > other.area()
+    }
 }
 
-fn main()
-{
-  let mut x = 5;
-  println!("{}", x);
+impl HasArea for Square {
+    fn area(&self) -> f64 {
+      self.side * self.side
+    }
 
-  x = 6;
-  println!("{}", x);
-
-  let y = &mut x;
-  // let k = 10;
-  // y = &k;
-  *y += 1;
-  println!("{}", y);
-
-
-  let x = RefCell::new(42);
-
-  let y = x.borrow_mut();
-  // let z = x.borrow_mut();
-
-  let mut origin = Point { x:0, y: 0 };
-  origin.x = 5;
-  println!("{}, {}", origin.x, origin.y);
-
-  let base_point = Point3d { x: 3, y: 8, z: 0 };
-  let point = Point3d { z: 10, .. base_point };
-  println!("{}, {}, {}", point.x, point.y, point.z);
-
-  {
-    let r = PointRef { x: &mut 10, y: &mut 10 };
-
-    *r.x = 1;
-    *r.y = 11;
-
-    println!("{}, {}", r.x, r.y);
-  }
-
-
-  let x: Message = Message::ChangeColor(3, 5, 6);
-
-
-  let x = 5;
-
-  match x {
-    1 => println!("one"),
-    2 => println!("two"),
-    3 => println!("three"),
-    4 => println!("four"),
-    5 => println!("five"),
-    _ => println!("something else"),
-  }
-
-  process_message(Message::ChangeColor(10, 145, 200));
+    fn is_larger(&self, other: &Self) -> bool {
+      self.area() > other.area()
+    }
 }
 
-fn process_message(msg: Message)
-{
-  match msg
-  {
-    Message::Quit => quit(),
-    Message::ChangeColor(r, g, b) => change_color(r, g, b),
-    Message::Write(s) => println!("{}", s),
-    _ => println!("messed up"),
-  };
+
+
+
+
+
+
+enum Option<T> {
+  Some(T),
+  None
 }
 
-fn quit()
-{
-  println!("quit");
+enum Result<T, E> {
+  Ok(T),
+  Err(E)
 }
 
-fn change_color(r: u32, g: u32, b: u32)
-{
-  println!("{}, {}, {}", r, g, b);
+fn main() {
+  let x: Option<i32> = Option::Some(5);
+
+  let q: Option<f64> = Option::Some(5f64);
+
+  let a = 32;
+
+  println!("{}", takes_anyhing::<i32>(a));
+
+
+  let y = Circle {x: 1.0, y: 2.0, radius: 3.0};
+  let k = Square {x: 1.0, y: 2.0, side: 3.0};
+  let b = 10;
+  print_area(y);
+  print_area(k);
+  // print_area(b); // would fail with 'trait not implemented'
+}
+
+
+fn takes_anyhing<T>(x: T) -> T {
+  x
+}
+
+
+fn print_area<T: HasArea>(shape: T) {
+  println!("{}", shape.area());
 }
