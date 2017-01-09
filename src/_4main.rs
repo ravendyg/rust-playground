@@ -80,6 +80,38 @@ fn main()
   }
 
   process_message(Message::ChangeColor(10, 145, 200));
+<<<<<<< HEAD
+=======
+
+  let m = Message::Write("Hello, world".to_string());
+
+
+  let v = vec!["Hello".to_string(), "World".to_string()];
+  // let v1: Vec<Message> = v.into_iter().map(Message::Write).collect();
+
+  let q: Vec<i32> = v.into_iter().map(printStr).collect();
+
+  let point3 = Point3d {x: 3, y: 34, z: 2};
+
+  match point3
+  {
+    Point3d {x, y, ..} => println!("{}, {}", x, y),
+  }
+
+  let ch = 'X';
+
+  match ch
+  {
+    'a' ... 'x' | 'A' ... 'X' => println!("matched"),
+    _ => println!("didn't"),
+  }
+}
+
+fn printStr(s: String) -> i32
+{
+  println!("{}", s);
+  111
+>>>>>>> 07c2273765eacbe14a1d34e1f823819b76b526dd
 }
 
 fn process_message(msg: Message)
@@ -101,4 +133,12 @@ fn quit()
 fn change_color(r: u32, g: u32, b: u32)
 {
   println!("{}, {}, {}", r, g, b);
+<<<<<<< HEAD
+=======
+}
+
+fn move_cursor(x: u32, y: u32)
+{
+  println!("move cursor to ({}, {})", x, y);
+>>>>>>> 07c2273765eacbe14a1d34e1f823819b76b526dd
 }

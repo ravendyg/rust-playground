@@ -49,10 +49,12 @@ enum Option<T> {
   None
 }
 
+
 enum Result<T, E> {
   Ok(T),
   Err(E)
 }
+
 
 fn main() {
   let x: Option<i32> = Option::Some(5);
@@ -80,4 +82,5 @@ fn takes_anyhing<T>(x: T) -> T {
 
 fn print_area<T: HasArea>(shape: T) {
   println!("{}", shape.area());
+
 }
